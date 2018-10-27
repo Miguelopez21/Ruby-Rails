@@ -24,13 +24,25 @@ module Api
             end
 
             def destroy #DELETE/PARAM
+                @post = @user.posts.find(params[:id]) 
+                if @post.destroy
+                    render json: @post, status: :deleted
+                else
+                    render json: @post.errors , status: :unprocessable_entity 
+                end
             end
 
             def update #PUT|PATH/PARAMS
+                @post = @user.posts.find(params[:id]) 
+                if @post.update post_params
+                    render json: @post, status: :updated
+                else
+                    render json: @post.errors , status: :unprocessable_entity 
+                end
             end
 
             def create #POST/PARAMS
-                @post = @user.posts.new (post_params)
+                @post = @user.posts.new (post_params)#se llama la relacion del modelo
                 if @post.save
                     render json: @post, status: :created
                 else
